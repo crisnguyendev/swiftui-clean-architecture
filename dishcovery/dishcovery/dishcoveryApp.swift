@@ -25,7 +25,7 @@ struct dishcoveryApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListRecipeView()
         }
         .modelContainer(sharedModelContainer)
     }
