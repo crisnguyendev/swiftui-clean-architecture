@@ -7,5 +7,6 @@
 
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
-BASE_URL = "https://api.spoonacular.com"
+BASE_URL = https:/$()/api.spoonacular.com
 API_KEY = e5612e339de9470f90317cdc3f80b130
+LOG_LEVEL = debug

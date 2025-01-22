@@ -14,7 +14,7 @@ struct KeychainService {
             kSecAttrAccount as String : key,
             kSecValueData as String   : data
         ]
-        SecItemDelete(query as CFDictionary) // Delete any existing items
+        SecItemDelete(query as CFDictionary) 
         return SecItemAdd(query as CFDictionary, nil)
     }
     

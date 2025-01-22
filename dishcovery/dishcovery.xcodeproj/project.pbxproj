@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B819F82D2D414D2C00228F4E /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = B819F82C2D414D2C00228F4E /* SwiftyBeaver */; };
 		B82853EF2D33D3D800F67241 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = B82853EE2D33D3D800F67241 /* KeychainAccess */; };
 		B82853F62D33FC7000F67241 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B82853F52D33FC7000F67241 /* Alamofire */; };
 		B853CEBE2D3AB3DF007DE24D /* Prod.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEBD2D3AB3DF007DE24D /* Prod.xcconfig */; };
@@ -97,6 +98,7 @@
 			files = (
 				B82853F62D33FC7000F67241 /* Alamofire in Frameworks */,
 				B82853EF2D33D3D800F67241 /* KeychainAccess in Frameworks */,
+				B819F82D2D414D2C00228F4E /* SwiftyBeaver in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +173,7 @@
 			packageProductDependencies = (
 				B82853EE2D33D3D800F67241 /* KeychainAccess */,
 				B82853F52D33FC7000F67241 /* Alamofire */,
+				B819F82C2D414D2C00228F4E /* SwiftyBeaver */,
 			);
 			productName = dishcovery;
 			productReference = B89D059F2D1E0E240034F69A /* dishcovery.app */;
@@ -257,6 +260,7 @@
 			packageReferences = (
 				B8BA82D42D32C2440091C3F5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				B82853ED2D33D3D800F67241 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				B819F82B2D414D2C00228F4E /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B89D05A02D1E0E240034F69A /* Products */;
@@ -644,6 +648,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B819F82B2D414D2C00228F4E /* XCRemoteSwiftPackageReference "SwiftyBeaver" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyBeaver/SwiftyBeaver.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
 		B82853ED2D33D3D800F67241 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
@@ -663,6 +675,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B819F82C2D414D2C00228F4E /* SwiftyBeaver */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B819F82B2D414D2C00228F4E /* XCRemoteSwiftPackageReference "SwiftyBeaver" */;
+			productName = SwiftyBeaver;
+		};
 		B82853EE2D33D3D800F67241 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B82853ED2D33D3D800F67241 /* XCRemoteSwiftPackageReference "KeychainAccess" */;

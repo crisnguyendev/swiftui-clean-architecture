@@ -14,31 +14,43 @@ final class MenuRepository: MenuRepositoryProtocol {
     private let modelContext: ModelContext
     
     init(networkService: NetworkServiceProtocol,
-         modelContext: ModelContext,
-         apiKey: String) {
+         modelContext: ModelContext) {
         self.networkService = networkService
         self.modelContext = modelContext
     }
     
     func fetchMenuItems(query: String) async throws -> [MenuItem] {
-        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "https://api.spoonacular.com/food/menuItems/search?query=\(encodedQuery)&apiKey=\(AppConfig.apiKey)") else {
+        guard let url = URL(string: "\(AppConfig.baseURL)/food/menuItems/search") else {
             throw RepositoryError.invalidURL
         }
         
+        let queryParameters: [String: Any] = [
+            "query": query
+        ]
+        
+        let request = APIRequest(
+            url: url, method: .get,
+            hearders: nil,
+            queryParams: queryParameters,
+            body: nil
+        )
+        
         do {
-            let response: MenuSearchResponse = try await networkService.fetch(from: url)
+            let response: MenuSearchResponse = try await networkService.performRequest(request)
             let menuItems = response.menuItems
             
             try await cacheMenuItems(menuItems)
-            print("fetchMenuItems: \(menuItems.count)")
+            print("fetchMenuItems: \(menuItems.count) items fetched and cached.")
+            
             return menuItems
         } catch {
-            // Attempt to retrieve from cache
+            // Attempt to retrieve menu items from cache in case of a network error.
             let cachedItems = try await fetchMenuItemsFromCache()
             if !cachedItems.isEmpty {
+                print("fetchMenuItems: Retrieved \(cachedItems.count) items from cache due to network error.")
                 return cachedItems
             } else {
+                print("fetchMenuItems: No cached items available. Propagating network error.")
                 throw RepositoryError.networkError(error)
             }
         }
@@ -56,18 +68,15 @@ final class MenuRepository: MenuRepositoryProtocol {
     private func cacheMenuItems(_ menuItems: [MenuItem]) async throws {
         let context = modelContext
         
-        // Optionally, clear existing cache before saving new items
         let existingItems = try await fetchMenuItemsFromCache()
         for item in existingItems {
             context.delete(item)
         }
         
-        // Insert new items
         for item in menuItems {
             context.insert(item)
         }
         
-        // Save changes
         try context.save()
     }
 }

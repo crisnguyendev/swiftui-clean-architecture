@@ -7,40 +7,59 @@
 
 import Foundation
 import Alamofire
-/// Interceptor that combines AuthorizationInterceptor and RetryInterceptor
+
 final class CompositeInterceptor: RequestInterceptor, @unchecked Sendable {
-    private let authorizationInterceptor: AuthorizationInterceptor
-    private let retryInterceptor: RetryInterceptor
-
-    init(authorizationInterceptor: AuthorizationInterceptor, retryInterceptor: RetryInterceptor) {
-        self.authorizationInterceptor = authorizationInterceptor
-        self.retryInterceptor = retryInterceptor
+    private let adaptors: [RequestAdapter]
+    private let retriers: [RequestRetrier]
+    
+    init(adaptors: [RequestAdapter], retriers: [RequestRetrier]) {
+        self.adaptors = adaptors
+        self.retriers = retriers
     }
-
-    /// Adapts the request by delegating to the AuthorizationInterceptor
+    
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        authorizationInterceptor.adapt(urlRequest, for: session, completion: completion)
+        adapt(urlRequest, with: adaptors, session: session, completion: completion)
     }
-
-    /// Handles retry by delegating first to the AuthorizationInterceptor, then to the RetryInterceptor
+    
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        authorizationInterceptor.retry(request, for: session, dueTo: error) { authRetryResult in
-            switch authRetryResult {
-            case .retry:
-                completion(.retry)
-            case .retryWithDelay(let delay):
-                completion(.retryWithDelay(delay))
+        handleRetry(request: request, session: session, error: error, retriers: retriers, completion: completion)
+    }
+    
+    private func adapt(_ request: URLRequest, with adaptors: [RequestAdapter], session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+        guard let first = adaptors.first else {
+            completion(.success(request))
+            return
+        }
+        
+        let remaining = Array(adaptors.dropFirst())
+        first.adapt(request, for: session) { result in
+            switch result {
+            case .success(let adaptedRequest):
+                self.adapt(adaptedRequest, with: remaining, session: session, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    private func handleRetry(request: Request, session: Session, error: Error, retriers: [RequestRetrier], completion: @escaping (RetryResult) -> Void) {
+        guard let first = retriers.first else {
+            completion(.doNotRetry)
+            return
+        }
+        
+        let remaining = Array(retriers.dropFirst())
+        first.retry(request, for: session, dueTo: error) { retryResult in
+            switch retryResult {
+            case .retry, .retryWithDelay(_):
+                completion(retryResult)
             case .doNotRetry:
-                // If AuthorizationInterceptor does not retry, let RetryInterceptor handle it
-                self.retryInterceptor.retry(request, for: session, dueTo: error, completion: completion)
+                self.handleRetry(request: request, session: session, error: error, retriers: remaining, completion: completion)
             case .doNotRetryWithError(let retryError):
-                // Pass the specific error to the completion handler
                 completion(.doNotRetryWithError(retryError))
             @unknown default:
-                // Handle any future cases gracefully
                 completion(.doNotRetry)
             }
         }
     }
 }
-
