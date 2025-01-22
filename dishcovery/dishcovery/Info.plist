@@ -6,8 +6,8 @@
 	<string>$(API_KEY)</string>
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
-	<key>CFBundleIdentifier</key>
-	<string></string>
+	<key>LOG_LEVEL</key>
+	<string>$(LOG_LEVEL)</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -52,7 +52,13 @@ struct DishcoveryApp: App {
     var body: some Scene {
         WindowGroup {
             // Create and inject the ViewModel
-            let repository = MenuRepository(networkService: AlamofireNetworkService(), modelContext: modelContext, apiKey: AppConfig.apiKey)
+            let apiKeyInterceptor = ApiKeyInterceptor()
+            let compositeInterceptor = CompositeInterceptor(
+                            adaptors: [apiKeyInterceptor],
+                            retriers: []
+                        )
+            let networkService = AlamofireNetworkService(session: NetworkSessionProvider.makeSession(interceptor: compositeInterceptor))
+            let repository = MenuRepository(networkService: networkService, modelContext: modelContext)
             let useCase = FetchMenuItemsUseCase(repository: repository)
             let viewModel = MenuListViewModel(fetchMenuItemsUseCase: useCase, modelContext: modelContext)
             

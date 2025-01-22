@@ -8,5 +8,5 @@
 import Foundation
 
 protocol NetworkServiceProtocol {
-    func fetch<T: Decodable>(from url: URL) async throws -> T
+    func performRequest<T: Decodable>(_ request: APIRequest) async throws -> T
 }
