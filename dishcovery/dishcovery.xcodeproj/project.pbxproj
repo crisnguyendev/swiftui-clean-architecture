@@ -10,15 +10,6 @@
 		B819F82D2D414D2C00228F4E /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = B819F82C2D414D2C00228F4E /* SwiftyBeaver */; };
 		B82853EF2D33D3D800F67241 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = B82853EE2D33D3D800F67241 /* KeychainAccess */; };
 		B82853F62D33FC7000F67241 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B82853F52D33FC7000F67241 /* Alamofire */; };
-		B853CEBE2D3AB3DF007DE24D /* Prod.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEBD2D3AB3DF007DE24D /* Prod.xcconfig */; };
-		B853CEBF2D3AB3DF007DE24D /* Prod.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEBD2D3AB3DF007DE24D /* Prod.xcconfig */; };
-		B853CEC02D3AB3DF007DE24D /* Prod.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEBD2D3AB3DF007DE24D /* Prod.xcconfig */; };
-		B853CEC22D3AB3FB007DE24D /* Dev.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEC12D3AB3FB007DE24D /* Dev.xcconfig */; };
-		B853CEC32D3AB3FB007DE24D /* Dev.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEC12D3AB3FB007DE24D /* Dev.xcconfig */; };
-		B853CEC42D3AB3FB007DE24D /* Dev.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEC12D3AB3FB007DE24D /* Dev.xcconfig */; };
-		B853CEC62D3AB40E007DE24D /* Staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEC52D3AB40E007DE24D /* Staging.xcconfig */; };
-		B853CEC72D3AB40E007DE24D /* Staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEC52D3AB40E007DE24D /* Staging.xcconfig */; };
-		B853CEC82D3AB40E007DE24D /* Staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B853CEC52D3AB40E007DE24D /* Staging.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -233,7 +224,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					B89D059E2D1E0E240034F69A = {
 						CreatedOnToolsVersion = 16.0;
@@ -279,9 +270,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B853CEC02D3AB3DF007DE24D /* Prod.xcconfig in Resources */,
-				B853CEC32D3AB3FB007DE24D /* Dev.xcconfig in Resources */,
-				B853CEC62D3AB40E007DE24D /* Staging.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,9 +277,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B853CEC72D3AB40E007DE24D /* Staging.xcconfig in Resources */,
-				B853CEBE2D3AB3DF007DE24D /* Prod.xcconfig in Resources */,
-				B853CEC42D3AB3FB007DE24D /* Dev.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,9 +284,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B853CEC82D3AB40E007DE24D /* Staging.xcconfig in Resources */,
-				B853CEBF2D3AB3DF007DE24D /* Prod.xcconfig in Resources */,
-				B853CEC22D3AB3FB007DE24D /* Dev.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,7 +396,7 @@
 			baseConfigurationReference = B853CEC12D3AB3FB007DE24D /* Dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -478,7 +460,7 @@
 			baseConfigurationReference = B853CEBD2D3AB3DF007DE24D /* Prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

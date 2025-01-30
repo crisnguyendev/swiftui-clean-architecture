@@ -12,8 +12,6 @@ struct MenuListState: Equatable {
     var menuItems: [MenuItem] = []
     var errorMessage: String?
     
-    // MARK: - Equatable Conformance
-    
     static func == (lhs: MenuListState, rhs: MenuListState) -> Bool {
         return lhs.isLoading == rhs.isLoading &&
                lhs.menuItems == rhs.menuItems &&

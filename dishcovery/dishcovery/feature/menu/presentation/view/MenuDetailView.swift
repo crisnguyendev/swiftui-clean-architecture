@@ -14,7 +14,6 @@ struct MenuDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // Display Menu Item Image
                 if let url = URL(string: menuItem.image) {
                     AsyncImage(url: url) { phase in
                         switch phase {
@@ -38,7 +37,6 @@ struct MenuDetailView: View {
                         }
                     }
                 } else {
-                    // Placeholder Image if URL is Invalid
                     Image(systemName: "photo")
                         .resizable()
                         .scaledToFit()
@@ -47,32 +45,9 @@ struct MenuDetailView: View {
                         .cornerRadius(10)
                 }
 
-                // Menu Item Title
                 Text(menuItem.title)
                     .font(.title)
                     .bold()
-
-                // Additional Information (Optional)
-                // Uncomment and adjust if `restaurantChain` and `servings` are used.
-                /*
-                if let restaurantChain = menuItem.restaurantChain {
-                    Text("Restaurant: \(restaurantChain)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-
-                if let servings = menuItem.servings {
-                    if let size = servings.size, let unit = servings.unit {
-                        Text("Servings: \(servings.number) x \(size) \(unit)")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text("Servings: \(servings.number)")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                */
 
                 Spacer()
             }

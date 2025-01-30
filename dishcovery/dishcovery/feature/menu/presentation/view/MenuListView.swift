@@ -10,28 +10,29 @@ import SwiftData
 
 struct MenuListView: View {
     @ObservedObject var viewModel: MenuListViewModel
+    @State private var searchText: String = ""
     
     var body: some View {
         NavigationView {
-            Group {
+            VStack {
                 if viewModel.state.isLoading {
-                    ProgressView("Loading Pho Menu Items...")
+                    ProgressView("Loading Menu Items...")
                         .padding()
+                    
                 } else if let errorMessage = viewModel.state.errorMessage {
                     VStack(spacing: 20) {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .multilineTextAlignment(.center)
                             .padding()
-                        Button(action: {
-                            viewModel.fetchMenuItems()
-                        }) {
-                            Text("Retry")
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                        
+                        Button("Retry") {
+                            viewModel.fetchMenuItems(query: searchText)
                         }
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     }
                 } else if viewModel.state.menuItems.isEmpty {
                     Text("No Menu Items Found")
@@ -43,26 +44,30 @@ struct MenuListView: View {
                             MenuItemRowView(menuItem: menuItem)
                         }
                     }
-                    .listStyle(PlainListStyle())
+                    .listStyle(.plain)
                 }
             }
-            .navigationTitle("Pho Menu")
+            .navigationTitle("Menu")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        viewModel.refreshMenuItems()
-                    }) {
+                    Button {
+                        viewModel.refreshMenuItems(query: searchText)
+                    } label: {
                         Image(systemName: "arrow.clockwise")
                     }
                 }
             }
+            .searchable(text: $searchText, prompt: "Search menu items...")
+            .onSubmit(of: .search) {
+                viewModel.fetchMenuItems(query: searchText)
+            }
             .onAppear {
-                print("MenuListView using ViewModel with id: \(ObjectIdentifier(viewModel))")
-                viewModel.fetchMenuItems()
+                if viewModel.state.menuItems.isEmpty {
+                    viewModel.fetchMenuItems(query: "pho")
+                }
             }
         }
     }
 }
-
 
 

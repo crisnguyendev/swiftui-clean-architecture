@@ -28,10 +28,8 @@ final class AuthorizationInterceptor: RequestInterceptor, @unchecked Sendable {
                     await state.setRefreshing(true)
                     do {
                         let _ = try await TokenManager.shared.refreshAccessToken()
-                        print("Token refreshed successfully.")
                         await state.processRequestsToRetry(with: .retry)
                     } catch {
-                        print("Token refresh failed: \(error)")
                         await state.processRequestsToRetry(with: .doNotRetryWithError(error))
                     }
                     
