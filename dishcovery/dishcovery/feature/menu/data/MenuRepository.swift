@@ -40,17 +40,14 @@ final class MenuRepository: MenuRepositoryProtocol {
             let menuItems = response.menuItems
             
             try await cacheMenuItems(menuItems)
-            print("fetchMenuItems: \(menuItems.count) items fetched and cached.")
             
             return menuItems
         } catch {
             // Attempt to retrieve menu items from cache in case of a network error.
             let cachedItems = try await fetchMenuItemsFromCache()
             if !cachedItems.isEmpty {
-                print("fetchMenuItems: Retrieved \(cachedItems.count) items from cache due to network error.")
                 return cachedItems
             } else {
-                print("fetchMenuItems: No cached items available. Propagating network error.")
                 throw RepositoryError.networkError(error)
             }
         }
@@ -60,7 +57,6 @@ final class MenuRepository: MenuRepositoryProtocol {
     private func fetchMenuItemsFromCache() async throws -> [MenuItem] {
         let fetchDescriptor = FetchDescriptor<MenuItem>()
         let menuItems = try modelContext.fetch(fetchDescriptor)
-        print("fetchMenuItemsFromCache: \(menuItems.count)")
         return menuItems
     }
     
