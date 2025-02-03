@@ -7,5 +7,5 @@
 import Foundation
 
 protocol FetchMenuItemsUseCaseProtocol {
-    func execute(query: String) async throws -> [MenuItem]
+    func execute(query: String, offset: Int, number: Int) async throws -> [MenuItem]
 }
