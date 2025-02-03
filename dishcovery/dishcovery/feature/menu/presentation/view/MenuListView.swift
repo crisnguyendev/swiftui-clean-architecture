@@ -42,7 +42,13 @@ struct MenuListView: View {
                     List(viewModel.state.menuItems) { menuItem in
                         NavigationLink(destination: MenuDetailView(menuItem: menuItem)) {
                             MenuItemRowView(menuItem: menuItem)
+                                .onAppear {
+                                    viewModel.loadMoreItemsIfNeeded(currentItem: menuItem)
+                                }
                         }
+                    }
+                    .refreshable {
+                        viewModel.refreshMenuItems()
                     }
                     .listStyle(.plain)
                 }

@@ -12,8 +12,8 @@ struct FetchMenuItemsUseCase: FetchMenuItemsUseCaseProtocol {
         self.repository = repository
     }
     
-    func execute(query: String) async throws -> [MenuItem] {
-        return try await repository.fetchMenuItems(query: query)
+    func execute(query: String, offset: Int, number: Int) async throws -> [MenuItem] {
+        try await repository.fetchMenuItems(query: query, offset: offset, number: number)
     }
     
 }

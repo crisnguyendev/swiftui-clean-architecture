@@ -19,34 +19,36 @@ final class MenuRepository: MenuRepositoryProtocol {
         self.modelContext = modelContext
     }
     
-    func fetchMenuItems(query: String) async throws -> [MenuItem] {
-        guard let url = URL(string: "\(AppConfig.baseURL)/food/menuItems/search") else {
+    func fetchMenuItems(query: String,
+                        offset: Int,
+                        number: Int) async throws -> [MenuItem] {
+        guard let url = URL(string: "\(AppConfig.baseURL)/food/menuItems/search")
+        else {
             throw RepositoryError.invalidURL
         }
         
-        let queryParameters: [String: Any] = [
-            "query": query
+        let queryParams: [String: Any] = [
+            "query": query,
+            "offset": offset,
+            "number": number
         ]
         
         let request = APIRequest(
-            url: url, method: .get,
+            url: url,
+            method: .get,
             hearders: nil,
-            queryParams: queryParameters,
+            queryParams: queryParams,
             body: nil
         )
         
         do {
             let response: MenuSearchResponse = try await networkService.performRequest(request)
-            let menuItems = response.menuItems
-            
-            try await cacheMenuItems(menuItems)
-            
-            return menuItems
+            try await cacheMenuItems(response.menuItems, clearOld: offset == 0)
+            return response.menuItems
         } catch {
-            // Attempt to retrieve menu items from cache in case of a network error.
-            let cachedItems = try await fetchMenuItemsFromCache()
-            if !cachedItems.isEmpty {
-                return cachedItems
+            let cached = try await readMenuItemsFromCache()
+            if !cached.isEmpty {
+                return cached
             } else {
                 throw RepositoryError.networkError(error)
             }
@@ -54,25 +56,24 @@ final class MenuRepository: MenuRepositoryProtocol {
     }
     
     @MainActor
-    private func fetchMenuItemsFromCache() async throws -> [MenuItem] {
-        let fetchDescriptor = FetchDescriptor<MenuItem>()
-        let menuItems = try modelContext.fetch(fetchDescriptor)
-        return menuItems
+    private func readMenuItemsFromCache() async throws -> [MenuItem] {
+        let descriptor = FetchDescriptor<MenuItem>()
+        return try modelContext.fetch(descriptor)
     }
     
     @MainActor
-    private func cacheMenuItems(_ menuItems: [MenuItem]) async throws {
-        let context = modelContext
-        
-        let existingItems = try await fetchMenuItemsFromCache()
-        for item in existingItems {
-            context.delete(item)
+    private func cacheMenuItems(_ newItems: [MenuItem], clearOld: Bool) async throws {
+        if clearOld {
+            let existing = try await readMenuItemsFromCache()
+            for item in existing {
+                modelContext.delete(item)
+            }
         }
         
-        for item in menuItems {
-            context.insert(item)
+        for item in newItems {
+            modelContext.insert(item)
         }
         
-        try context.save()
+        try modelContext.save()
     }
 }
