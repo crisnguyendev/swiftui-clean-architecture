@@ -92,7 +92,7 @@ The project is divided into distinct modules:
       ```
   - **Data:**  
     - Implements the repository pattern to abstract data access.
-    - Combines remote API calls with local caching strategies for offline support.
+    - Combines remote API calls with local caching strategies (SwiftData) for offline support.
   - **Presentation:**  
     - Follows the MVVM pattern.  
       - **ViewModel:** Manages state, search inputs, pagination (load more and pull-to-refresh), and offline data handling.
