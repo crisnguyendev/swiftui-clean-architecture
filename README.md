@@ -13,6 +13,7 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 - [Environment & Build Configuration](#environment--build-configuration)
 - [API Integration](#api-integration)
 - [Testing](#testing)
+- [Todo List](#coming-soon)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -152,7 +153,7 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
 
 ---
 
-## Todo List: Coming soon...
+## Coming soon
 
 1. **Integrate Analytics Frameworks**
    - **User Behavior Tracking:**
