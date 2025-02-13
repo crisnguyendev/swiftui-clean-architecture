@@ -151,7 +151,7 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
   - Leverage different Xcconfig files and schemes to test across Production, Development, and Staging environments.
   
 
-## Todo List: Near Future Plans
+## Todo List: Coming soon...
 
 1. **Integrate Analytics Frameworks**
    - **User Behavior Tracking:**
