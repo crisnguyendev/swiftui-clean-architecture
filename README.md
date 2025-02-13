@@ -203,3 +203,30 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 Happy coding and enjoy exploring Dishcovery!
+
+
+---
+
+## Todo List: Coming soon...
+
+1. **Integrate Analytics Frameworks**
+   - **User Behavior Tracking:**
+     - Add frameworks like Adobe Analytics or Firebase Analytics to monitor user behavior.
+     - Track events such as `recipe_viewed`, `menu_searched`, and `menu_item_selected`.
+   - **App Performance Monitoring & Crash Reporting:**
+     - Use Firebase Crashlytics, Sentry, or AppDynamics to monitor app crashes and performance.
+     - Set up alerts for critical crashes and performance bottlenecks.
+
+2. **Integrate Remote Configuration System**
+   - Add tools like Firebase Remote Config or LaunchDarkly for A/B testing and feature flagging.
+   - Enable staged rollouts and dynamically control feature availability without app updates.
+
+3. **Integrate CI/CD System**
+   - Set up Jenkins, Fastlane, or GitHub Actions for automated builds, testing, and deployments.
+   - Automate app delivery to App Store Connect for efficient release management.
+
+4. **Feature Rollout Management**
+   - Integrate with LaunchDarkly or similar tools for percentage-based rollouts, targeted user releases, version-specific features, and dependency-based rollouts.
+
+---
+
