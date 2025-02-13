@@ -96,8 +96,6 @@ The project is divided into distinct modules:
     - Follows the MVVM pattern.  
       - **ViewModel:** Manages state, search inputs, pagination (load more and pull-to-refresh), and offline data handling.
       - **View:** SwiftUI views that display data and manage user interactions.
-  - **Infrastructure:**  
-    - Provides low-level components such as network handling and data storage services.
 
 #### Feature: Menu
 
