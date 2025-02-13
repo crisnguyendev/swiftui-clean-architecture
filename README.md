@@ -149,7 +149,8 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
   - Implement automated tests with XCUITest to ensure a smooth user experience.
 - **Multi Environment Testing:**  
   - Leverage different Xcconfig files and schemes to test across Production, Development, and Staging environments.
-  
+
+---
 
 ## Todo List: Coming soon...
 
@@ -171,7 +172,6 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
 
 4. **Feature Rollout Management**
    - Integrate with LaunchDarkly or similar tools for percentage-based rollouts, targeted user releases, version-specific features, and dependency-based rollouts.
-
 
 ---
 
