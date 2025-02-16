@@ -11,7 +11,7 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 - [Architecture](#architecture)
   - [Core Module](#core-module)
   - [Modular Structure & Feature Breakdown](#modular-structure--feature-breakdown)
-  - [Design Trade-offs](#design-trade-offs)
+- [Design Trade-offs](#design-trade-offs)
 - [Environment & Build Configuration](#environment--build-configuration)
 - [API Integration](#api-integration)
 - [Testing](#testing)
@@ -139,17 +139,19 @@ The **Menu** feature allows users to search menus by name, even when offline. Ke
 
 *Refer to the project code for detailed implementations in the `Features/Menu` folder, including `MenuItem.swift`, `MenuRepository.swift`, `MenuViewModel.swift`, and associated files.*
 
-### Design Trade-offs
+---
+
+## Design Trade-offs
 
 #### Use of `@Model` Macro with SwiftData in Domain Models
 In this project, **SwiftData's `@Model` macro is used directly in the domain layer models** (e.g., `MenuItem`). This approach is a deviation from the traditional **Clean Architecture principle**, which advocates separating domain models from data persistence layers.
 
-#### **Why this Trade-off?**
+### **Why this Trade-off?**
 - **Convenience:** SwiftData tightly integrates with SwiftUI, allowing seamless use of `@Model` objects in SwiftUI views.
 - **Performance Optimization:** Using SwiftData in the domain model minimizes complexity and leverages its built-in data-binding features.
 - **Long-term Focus:** This decision aligns with our plan to stick with **SwiftUI and SwiftData** for the foreseeable future.
 
-#### **Alternative Approach**
+### **Alternative Approach**
 A more "Clean Architecture"-compliant approach would:
 1. Define **domain models** without the `@Model` macro.
 2. Use a **data layer** (e.g., repositories) to convert SwiftData objects into domain models.
