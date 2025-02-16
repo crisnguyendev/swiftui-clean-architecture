@@ -7,13 +7,14 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 ## Table of Contents
 
 - [Features](#features)
+- [Coming Soon](#coming-soon)
 - [Architecture](#architecture)
   - [Core Module](#core-module)
   - [Modular Structure & Feature Breakdown](#modular-structure--feature-breakdown)
+  - [Design Trade-offs](#design-trade-offs)
 - [Environment & Build Configuration](#environment--build-configuration)
 - [API Integration](#api-integration)
 - [Testing](#testing)
-- [Todo List](#coming-soon)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -49,6 +50,29 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
   - Extensions for colors, fonts, dimensions, modifiers, and localized strings.
 - **Dependency Injection:** Supports dependency injection for decoupled, modular, and testable code.
 - **Dependency Management:** Uses Swift Package Manager (SPM) to manage dependencies, frameworks, and libraries.
+
+---
+
+## Coming Soon
+
+1. **Integrate Analytics Frameworks**
+   - **User Behavior Tracking:**
+     - Add frameworks like Adobe Analytics or Firebase Analytics to monitor user behavior.
+     - Track events such as `recipe_viewed`, `menu_searched`, and `menu_item_selected`.
+   - **App Performance Monitoring & Crash Reporting:**
+     - Use Firebase Crashlytics, Sentry, or AppDynamics to monitor app crashes and performance.
+     - Set up alerts for critical crashes and performance bottlenecks.
+
+2. **Integrate Remote Configuration System**
+   - Add tools like Firebase Remote Config or LaunchDarkly for A/B testing and feature flagging.
+   - Enable staged rollouts and dynamically control feature availability without app updates.
+
+3. **Integrate CI/CD System**
+   - Use **Fastlane + Jenkins** to support large-scale projects and ensure consistent CI/CD practices across teams (e.g., backend, frontend) in enterprise environments.
+   - For smaller teams, consider experimenting with **Fastlane + GitHub Actions** to simplify automation workflows.
+
+4. **Feature Rollout Management**
+   - Integrate with LaunchDarkly or similar tools for percentage-based rollouts, targeted user releases, version-specific features, and dependency-based rollouts.
 
 ---
 
@@ -115,6 +139,28 @@ The **Menu** feature allows users to search menus by name, even when offline. Ke
 
 *Refer to the project code for detailed implementations in the `Features/Menu` folder, including `MenuItem.swift`, `MenuRepository.swift`, `MenuViewModel.swift`, and associated files.*
 
+### Design Trade-offs
+
+#### Use of `@Model` Macro with SwiftData in Domain Models
+In this project, **SwiftData's `@Model` macro is used directly in the domain layer models** (e.g., `MenuItem`). This approach is a deviation from the traditional **Clean Architecture principle**, which advocates separating domain models from data persistence layers.
+
+#### **Why this Trade-off?**
+- **Convenience:** SwiftData tightly integrates with SwiftUI, allowing seamless use of `@Model` objects in SwiftUI views.
+- **Performance Optimization:** Using SwiftData in the domain model minimizes complexity and leverages its built-in data-binding features.
+- **Long-term Focus:** This decision aligns with our plan to stick with **SwiftUI and SwiftData** for the foreseeable future.
+
+#### **Alternative Approach**
+A more "Clean Architecture"-compliant approach would:
+1. Define **domain models** without the `@Model` macro.
+2. Use a **data layer** (e.g., repositories) to convert SwiftData objects into domain models.
+3. Ensure a strict separation of concerns between domain and data layers.
+
+However, this would:
+- Add unnecessary complexity.
+- Reduce the benefits of SwiftData's seamless integration with SwiftUI.
+
+This trade-off reflects our prioritization of simplicity and productivity over strict adherence to architectural purity.
+
 ---
 
 ## Environment & Build Configuration
@@ -150,29 +196,6 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
   - Implement automated tests with XCUITest to ensure a smooth user experience.
 - **Multi Environment Testing:**  
   - Leverage different Xcconfig files and schemes to test across Production, Development, and Staging environments.
-
----
-
-## Coming soon
-
-1. **Integrate Analytics Frameworks**
-   - **User Behavior Tracking:**
-     - Add frameworks like Adobe Analytics or Firebase Analytics to monitor user behavior.
-     - Track events such as `recipe_viewed`, `menu_searched`, and `menu_item_selected`.
-   - **App Performance Monitoring & Crash Reporting:**
-     - Use Firebase Crashlytics, Sentry, or AppDynamics to monitor app crashes and performance.
-     - Set up alerts for critical crashes and performance bottlenecks.
-
-2. **Integrate Remote Configuration System**
-   - Add tools like Firebase Remote Config or LaunchDarkly for A/B testing and feature flagging.
-   - Enable staged rollouts and dynamically control feature availability without app updates.
-
-3. **Integrate CI/CD System**
-   - Set up Jenkins, Fastlane, or GitHub Actions for automated builds, testing, and deployments.
-   - Automate app delivery to App Store Connect for efficient release management.
-
-4. **Feature Rollout Management**
-   - Integrate with LaunchDarkly or similar tools for percentage-based rollouts, targeted user releases, version-specific features, and dependency-based rollouts.
 
 ---
 
