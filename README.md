@@ -69,7 +69,6 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 
 3. **Integrate CI/CD System**
    - Use **Fastlane + Jenkins** to support large-scale projects and ensure consistent CI/CD practices across teams (e.g., backend, frontend) in enterprise environments.
-   - For smaller teams, consider experimenting with **Fastlane + GitHub Actions** to simplify automation workflows.
 
 4. **Feature Rollout Management**
    - Integrate with LaunchDarkly or similar tools for percentage-based rollouts, targeted user releases, version-specific features, and dependency-based rollouts.
