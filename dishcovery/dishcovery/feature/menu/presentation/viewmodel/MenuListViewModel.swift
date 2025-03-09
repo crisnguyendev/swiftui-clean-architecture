@@ -56,7 +56,7 @@ final class MenuListViewModel: ObservableObject {
         }
     }
     
-    func loadMoreItemsIfNeeded(currentItem: MenuItem) {
+    func loadMoreItemsIfNeeded(currentItem: Menu) {
         guard !isFetchingMore,
               hasMoreData,
               let lastItem = state.menuItems.last,

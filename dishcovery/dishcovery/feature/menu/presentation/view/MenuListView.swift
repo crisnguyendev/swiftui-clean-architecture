@@ -16,7 +16,7 @@ struct MenuListView: View {
         NavigationView {
             VStack {
                 if viewModel.state.isLoading {
-                    ProgressView("Loading Menu Items...")
+                    ProgressView("Loading...")
                         .padding()
                     
                 } else if let errorMessage = viewModel.state.errorMessage {
@@ -35,7 +35,7 @@ struct MenuListView: View {
                         .cornerRadius(8)
                     }
                 } else if viewModel.state.menuItems.isEmpty {
-                    Text("No Menu Items Found")
+                    Text("Not Found")
                         .foregroundColor(.gray)
                         .padding()
                 } else {
@@ -63,7 +63,7 @@ struct MenuListView: View {
                     }
                 }
             }
-            .searchable(text: $searchText, prompt: "Search menu items...")
+            .searchable(text: $searchText, prompt: "Search menu")
             .onSubmit(of: .search) {
                 viewModel.fetchMenuItems(query: searchText)
             }

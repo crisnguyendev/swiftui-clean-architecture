@@ -9,7 +9,7 @@ import Foundation
 
 struct MenuListState: Equatable {
     var isLoading: Bool = false
-    var menuItems: [MenuItem] = []
+    var menuItems: [Menu] = []
     var errorMessage: String?
     
     static func == (lhs: MenuListState, rhs: MenuListState) -> Bool {

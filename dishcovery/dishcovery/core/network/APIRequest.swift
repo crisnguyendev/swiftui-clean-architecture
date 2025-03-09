@@ -9,7 +9,7 @@ import Foundation
 struct APIRequest {
     let url: URL
     let method: HTTPMethod
-    let hearders: [String: String]?
+    let headers: [String: String]?
     let queryParams: [String: Any]?
     let body: Data?
 }

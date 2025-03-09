@@ -21,7 +21,7 @@ enum APIError: Error, LocalizedError {
         case .serverError(let statusCode, let message):
             return "Server Error (\(statusCode)): \(message)"
         case .unknownError:
-            return "An unknown error occurred."
+            return "An unknown error occurrprined."
         }
     }
 }

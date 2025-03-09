@@ -6,5 +6,5 @@
 //
 
 protocol MenuRepositoryProtocol {
-    func fetchMenuItems(query: String, offset: Int, number: Int) async throws -> [MenuItem]
+    func search(query: String, offset: Int, number: Int) async throws -> [Menu]
 }

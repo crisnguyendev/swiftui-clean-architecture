@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MenuItemRowView: View {
-    let menuItem: MenuItem
+    let menuItem: Menu
     
     var body: some View {
         HStack(alignment: .top) {

@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct MenuDetailView: View {
-    let menuItem: MenuItem
+    let menuItem: Menu
 
     var body: some View {
         ScrollView {
