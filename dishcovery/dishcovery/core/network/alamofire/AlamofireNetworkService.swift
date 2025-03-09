@@ -11,7 +11,7 @@ import Foundation
 final class AlamofireNetworkService: NetworkServiceProtocol {
     private let session: Session
 
-    init(session: Session = NetworkSessionProvider.makeSession()) {
+    init(session: Session = AlamofireSessionProvider.makeAlamofireSession()) {
         self.session = session
     }
     
@@ -19,7 +19,7 @@ final class AlamofireNetworkService: NetworkServiceProtocol {
         var urlRequest = URLRequest(url: request.url)
         urlRequest.httpMethod = request.method.rawValue
 
-        if let headers = request.hearders {
+        if let headers = request.headers {
             for (headerField, headerValue) in headers {
                 urlRequest.setValue(headerValue, forHTTPHeaderField: headerField)
             }

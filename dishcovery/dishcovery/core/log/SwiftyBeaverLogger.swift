@@ -28,10 +28,12 @@ final class SwiftyBeaverLogger: LoggerProtocol {
         // Customize log formats if desired
         console.format = "$DHH:mm:ss$d $L $M"
         file.format = "$Dyyyy-MM-dd HH:mm:ss$d $L $M"
+        console.logPrintWay = .logger(subsystem: "Main", category: "UI")
+        console.useTerminalColors = true
         
         // Add destinations to SwiftyBeaver
         log.addDestination(console)
-        log.addDestination(file)
+//        log.addDestination(file)
     }
     
     func log(_ message: String, level: LogLevel) {

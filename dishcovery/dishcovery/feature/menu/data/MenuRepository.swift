@@ -11,17 +11,12 @@ import SwiftData
 
 final class MenuRepository: MenuRepositoryProtocol {
     private let networkService: NetworkServiceProtocol
-    private let modelContext: ModelContext
     
-    init(networkService: NetworkServiceProtocol,
-         modelContext: ModelContext) {
+    init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
-        self.modelContext = modelContext
     }
     
-    func fetchMenuItems(query: String,
-                        offset: Int,
-                        number: Int) async throws -> [MenuItem] {
+    func query(query: String, offset: Int, limit: Int) async throws-> (total: Int, recipes: [MenuModel]){
         guard let url = URL(string: "\(AppConfig.baseURL)/food/menuItems/search")
         else {
             throw RepositoryError.invalidURL
@@ -30,50 +25,24 @@ final class MenuRepository: MenuRepositoryProtocol {
         let queryParams: [String: Any] = [
             "query": query,
             "offset": offset,
-            "number": number
+            "number": limit
         ]
         
         let request = APIRequest(
             url: url,
             method: .get,
-            hearders: nil,
+            headers: nil,
             queryParams: queryParams,
             body: nil
         )
         
         do {
-            let response: MenuSearchResponse = try await networkService.performRequest(request)
-            try await cacheMenuItems(response.menuItems, clearOld: offset == 0)
-            return response.menuItems
+            let response: SearchMenuResultDTO = try await networkService.performRequest(request)
+            let totalResults = response.totalResults
+            let data = response.data.map { MenuModel(dto: $0) }
+            return (totalResults, data)
         } catch {
-            let cached = try await readMenuItemsFromCache()
-            if !cached.isEmpty {
-                return cached
-            } else {
-                throw RepositoryError.networkError(error)
-            }
+            throw RepositoryError.networkError(error)
         }
-    }
-    
-    @MainActor
-    private func readMenuItemsFromCache() async throws -> [MenuItem] {
-        let descriptor = FetchDescriptor<MenuItem>()
-        return try modelContext.fetch(descriptor)
-    }
-    
-    @MainActor
-    private func cacheMenuItems(_ newItems: [MenuItem], clearOld: Bool) async throws {
-        if clearOld {
-            let existing = try await readMenuItemsFromCache()
-            for item in existing {
-                modelContext.delete(item)
-            }
-        }
-        
-        for item in newItems {
-            modelContext.insert(item)
-        }
-        
-        try modelContext.save()
     }
 }
