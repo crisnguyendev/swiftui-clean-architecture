@@ -6,7 +6,6 @@
 //
 
 protocol RecipeRepositoryProtocol {
-    func loadCache() async throws -> [RecipeModel]
     func query(query: String, offset: Int, limit: Int) async throws-> (total: Int, recipes: [RecipeModel])
     func clearCache() async throws
 }

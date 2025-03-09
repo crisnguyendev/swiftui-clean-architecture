@@ -20,11 +20,6 @@ struct MockRecipeRepository: RecipeRepositoryProtocol {
         self.mockData = mockData
     }
     
-    
-    func loadCache() async throws -> [RecipeModel] {
-        return mockData
-    }
-    
     func query(query: String, offset: Int, limit: Int) async throws -> (total: Int, recipes: [RecipeModel]) {
         return (mockTotalResult, mockData)
     }

@@ -53,18 +53,6 @@ class RecipeRepositoryTest: XCTestCase {
         mockPersistentService = nil
     }
     
-    func testLoadCacheSuccessful() async throws{
-        mockPersistentService.result = .success([mockRecipeEntity])
-        repository = RecipeRepository(
-            networkService: mockNetworkService,
-            persistentService: mockPersistentService
-        )
-        
-        let cachedItems = try await repository.loadCache()
-        XCTAssertEqual(cachedItems.count, 1)
-        XCTAssertEqual(cachedItems[0].id, mockId)
-    }
-    
     func testQuerySuccessful() async throws {
         mockNetworkService.result = .success(mockSearchRecipeResult)
         mockPersistentService.result = .success([mockRecipeEntity])

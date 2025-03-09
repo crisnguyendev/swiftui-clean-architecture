@@ -14,7 +14,7 @@ final class ModelContainerManager {
        
        private init() {
            do {
-               modelContainer = try ModelContainer(for: RecipeEntity.self, Menu.self)
+               modelContainer = try ModelContainer(for: RecipeEntity.self)
            } catch {
                fatalError("Failed to initialize ModelContainer: \(error)")
            }

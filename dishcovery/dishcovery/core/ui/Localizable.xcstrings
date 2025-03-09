@@ -35,6 +35,7 @@
       }
     },
     "Not Found" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -67,6 +68,7 @@
       }
     },
     "Retry" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -83,6 +85,7 @@
       }
     },
     "Search menu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -97,6 +100,9 @@
           }
         }
       }
+    },
+    "Search Menu" : {
+
     },
     "Search Recipe" : {
       "localizations" : {

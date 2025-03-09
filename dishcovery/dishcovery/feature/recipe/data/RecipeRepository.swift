@@ -20,10 +20,6 @@ struct RecipeRepository<RecipePersistentService: PersistentServiceProtocol>: Rec
         self.persistentService = persistentService
     }
     
-    func loadCache() async throws -> [RecipeModel] {
-        return try await loadFromCache().map { RecipeModel(entity: $0) }
-    }
-    
     func query(query: String, offset: Int, limit: Int) async throws -> (total: Int, recipes: [RecipeModel]) {
         do {
             let result = try await loadFromNetwork(query: query, offset: offset, number: limit)
@@ -72,8 +68,6 @@ struct RecipeRepository<RecipePersistentService: PersistentServiceProtocol>: Rec
         }
         try await persistentService.commit()
     }
-    
-    
     
     func clearCache() async throws {
         try await persistentService.clearAll()
