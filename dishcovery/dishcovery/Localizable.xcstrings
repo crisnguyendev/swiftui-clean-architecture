@@ -34,23 +34,6 @@
         }
       }
     },
-    "Not Found" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not Found"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Không tìm thấy"
-          }
-        }
-      }
-    },
     "Recipe" : {
       "localizations" : {
         "en" : {
@@ -67,30 +50,12 @@
         }
       }
     },
-    "Retry" : {
-      "extractionState" : "stale",
+    "Search Menu" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Retry"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thử lại"
-          }
-        }
-      }
-    },
-    "Search menu" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search menu"
+            "value" : "Search Menu"
           }
         },
         "vi" : {
@@ -100,9 +65,6 @@
           }
         }
       }
-    },
-    "Search Menu" : {
-
     },
     "Search Recipe" : {
       "localizations" : {

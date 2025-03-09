@@ -20,7 +20,6 @@ final class SearchRecipeViewModel: ObservableObject {
     
     func search(query: String) async {
         state = .loading
-        
         do {
             let recipes = try await usecase.fetch(query: query)
             state = recipes.isEmpty ? .error("Not found") : .loaded(recipes)
@@ -52,13 +51,9 @@ final class SearchRecipeViewModel: ObservableObject {
     }
     
     func refresh() async {
-        
-        do {
-            let refreshedRecipes = try await usecase.refresh()
-            state = refreshedRecipes.isEmpty ? .error("Not found") : .loaded(refreshedRecipes)
-        } catch {
-            state = .error(error.localizedDescription)
-        }
+        state = .loading
+        let refreshedRecipes = await usecase.refresh()
+        state = .loaded(refreshedRecipes)
         
     }
 }

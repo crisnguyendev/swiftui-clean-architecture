@@ -20,9 +20,11 @@ struct SearchRecipeUseCase: SearchRecipeUseCaseProtocol {
     }
     
     mutating func fetch(query: String) async throws -> [RecipeModel] {
+        if (query != currentQuery) {
+            try await repository.clearCache()
+        }
         currentQuery = query
         currentOffset = 0
-        try await repository.clearCache()
         let (total, data) = try await repository.query(query: currentQuery, offset: currentOffset, limit: limit)
         totalResults = total
         return data
@@ -35,12 +37,18 @@ struct SearchRecipeUseCase: SearchRecipeUseCaseProtocol {
     
     mutating func loadMoreData() async throws -> [RecipeModel] {
         currentOffset += limit
-        let (_, data) = try await repository.query(query: currentQuery, offset: currentOffset, limit: limit)
+        let (total, data) = try await repository.query(query: currentQuery, offset: currentOffset, limit: limit)
+        totalResults = total
         return data
     }
     
-    mutating func refresh() async throws -> [RecipeModel] {
-        return try await fetch(query: currentQuery)
+    mutating func refresh() async -> [RecipeModel] {
+        do {
+            let refreshData = try await fetch(query: currentQuery)
+            return refreshData
+        } catch {
+            return (try? await repository.loadFromCache()) ?? []
+        }
     }
 }
 

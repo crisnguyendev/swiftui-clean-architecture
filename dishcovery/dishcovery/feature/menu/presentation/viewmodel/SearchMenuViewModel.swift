@@ -54,7 +54,6 @@ final class SearchMenuViewModel: ObservableObject {
     }
     
     func refresh() async {
-        
         do {
             let newData = try await usecase.refresh()
             state = newData.isEmpty ? .error("Not found") : .loaded(newData)

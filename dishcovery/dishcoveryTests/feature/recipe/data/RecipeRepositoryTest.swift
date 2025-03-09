@@ -74,11 +74,11 @@ class RecipeRepositoryTest: XCTestCase {
             networkService: mockNetworkService,
             persistentService: mockPersistentService
         )
-        
-        let (total, data) = try await repository.query(query: "Test", offset: 0, limit: 10)
-        XCTAssertEqual(total, 1)
-        XCTAssertEqual(data[0].id, mockId)
-        XCTAssertEqual(data[0].title, mockCachedTitle)
+        do {
+            let _ = try await repository.query(query: "Test", offset: 0, limit: 10)
+        } catch {
+            XCTAssertEqual(error.localizedDescription, RepositoryError.invalidURL.localizedDescription)
+        }
     }
     
 }

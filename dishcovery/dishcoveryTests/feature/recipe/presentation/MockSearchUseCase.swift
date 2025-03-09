@@ -8,6 +8,7 @@ import Foundation
 @testable import dishcovery
 
 struct MockSearchUseCase: SearchRecipeUseCaseProtocol {
+    
     var result: Result<[RecipeModel], Error>?
     var mockHasMoreData: Bool?
     
@@ -20,8 +21,12 @@ struct MockSearchUseCase: SearchRecipeUseCaseProtocol {
         return try getData()
     }
     
-    mutating func refresh() async throws -> [RecipeModel] {
-        return try getData()
+    mutating func refresh() async -> [RecipeModel] {
+        do {
+            return try getData()
+        } catch {
+            return []
+        }
     }
     
     func hasMoreData() -> Bool {

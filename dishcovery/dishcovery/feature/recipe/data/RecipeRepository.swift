@@ -26,8 +26,7 @@ struct RecipeRepository<RecipePersistentService: PersistentServiceProtocol>: Rec
             try await saveToCache(recipes: result.data)
             return (total: result.total, recipes: result.data.map { RecipeModel(dto: $0) })
         } catch {
-            let cachedData = try await loadFromCache().map { RecipeModel(entity: $0) }
-            return (total: cachedData.count, recipes: cachedData)
+            throw error
         }
     }
     
@@ -58,8 +57,8 @@ struct RecipeRepository<RecipePersistentService: PersistentServiceProtocol>: Rec
         }
     }
     
-    private func loadFromCache() async throws -> [RecipeEntity] {
-        return try await persistentService.fetch(predicate: nil)
+    func loadFromCache() async throws -> [RecipeModel] {
+        return try await persistentService.fetch(predicate: nil).map{RecipeModel(entity: $0)}
     }
     
     private func saveToCache(recipes: [RecipeDTO]) async throws {
