@@ -25,6 +25,7 @@ struct SearchRecipeView: View {
                             }
                         }
                 }
+                .animation(.default, value: items)
                 .listStyle(.plain)
                 .refreshable {
                     Task {

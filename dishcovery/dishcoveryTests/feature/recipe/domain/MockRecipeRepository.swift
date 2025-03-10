@@ -11,6 +11,8 @@ import Foundation
 
 struct MockRecipeRepository: RecipeRepositoryProtocol {
     
+    
+    
     let mockData: [RecipeModel]
     let mockTotalResult: Int
     
@@ -26,6 +28,10 @@ struct MockRecipeRepository: RecipeRepositoryProtocol {
     
     func clearCache() async throws {
         // Do nothing here
+    }
+    
+    func loadFromCache() async throws -> [RecipeModel] {
+        return mockData
     }
     
     

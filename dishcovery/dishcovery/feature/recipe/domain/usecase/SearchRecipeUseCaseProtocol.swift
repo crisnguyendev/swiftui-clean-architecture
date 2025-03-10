@@ -8,6 +8,6 @@
 protocol SearchRecipeUseCaseProtocol {
     mutating func fetch(query: String) async throws -> [RecipeModel]
     mutating func loadMoreData() async throws -> [RecipeModel]
-    mutating func refresh() async throws -> [RecipeModel]
+    mutating func refresh() async -> [RecipeModel]
     func hasMoreData() -> Bool
 }

@@ -33,6 +33,7 @@ struct SearchMenuView: View {
                     }
                     
                 }
+                .animation(.default, value: items)
                 .navigationTitle("Menu")
             }
             .onAppear {

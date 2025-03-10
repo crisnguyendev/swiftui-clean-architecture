@@ -51,7 +51,7 @@ class SearchRecipeUseCaseTest: XCTestCase {
     }
     
     func testRefresh() async throws {
-        let result = try await useCase.refresh()
+        let result = await useCase.refresh()
         XCTAssertEqual(result.count, 1)
         XCTAssertEqual(result[0].id, mockId)
         XCTAssertEqual(result[0].title, mockTitle)
