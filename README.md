@@ -27,10 +27,10 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 ## Features
 
 - **Discover Recipes:** Browse a curated list of recipes.
-- **Search Menu:** Search menu items by name with robust offline caching and pagination support.
-- **Search Recipe:** Search recipes by name or ingredients using a dedicated API service.
+- **Search Menu:** Search menu items by name with pagination support (no offline caching).
+- **Search Recipe:** Search recipes by name or ingredients using a dedicated API service, with offline caching support.
 - **Detailed Recipe Information:** View details like ingredients, instructions, nutritional facts, and more.
-- **Offline Support & Caching:** Work offline seamlessly using locally cached data.
+- **Offline Support & Caching:** Recipe data is cached locally to ensure access when offline.
 - **Paging & Refresh:** Integrated support for load-more pagination and pull-to-refresh actions.
 - **Multi Environment Support:**  
   - Build variants managed with Xcconfig files, custom Info.plist keys, and defined schemes.
@@ -115,7 +115,7 @@ The project is divided into distinct modules:
 #### Presentation Layer
 
 - **View:**  
-  SwiftUI views or other UI components responsible for displaying data.
+  SwiftUI views or other UI components responsible for displaying data.  
   The View depends on the ViewModel but not vice versa. This decoupling means the ViewModel can be reused in various UI layers without being tightly bound to a specific view implementation.
 - **ViewModel:**  
   Acts as an intermediary between the View and Domain layers, managing state, processing user inputs, and coordinating with use cases.
@@ -127,7 +127,7 @@ The project is divided into distinct modules:
 - **Recipe Feature (MVVM-C):**  
   Implements the Model-View-ViewModel-Coordinator pattern to promote modularity and clear navigation flows. The Coordinator handles screen transitions, while the ViewModel focuses on business logic.
 - **Menu Feature (MVI):**  
-  Adopts the Model-View-Intent pattern, using unidirectional data flow to manage reactive state and user interactions, especially useful for complex interactions like pagination and offline caching.
+  Adopts the Model-View-Intent pattern, using unidirectional data flow to manage reactive state and user interactions, especially useful for complex interactions like pagination.
 
 ---
 
@@ -158,7 +158,8 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
    - Register at the Spoonacular API page to obtain your API key.
    - Store your API key securely in a configuration file (e.g., `Secrets.plist`) or via environment variables.
 2. **Data Layer Integration:**
-   - The repository combines remote API calls with local caching to ensure data is available offline and updated in real-time when online.
+   - For the **Search Recipe** feature, the repository combines remote API calls with local caching to ensure recipe data is available offline.
+   - The **Search Menu** feature relies solely on remote API calls with pagination support.
 
 ---
 
@@ -180,23 +181,12 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
 
 1. **Launch the App:**
    - Open the project in Xcode and run it on your preferred simulator or device.
-2. **Explore & Search Menus and Recipes:**
-   - Use the search bars in the Menu and Recipe features to find content by name or ingredients.
+2. **Explore & Search:**
+   - Use the search bar in the **Menu** feature to find menus by name (online only).
+   - Use the search bar in the **Recipe** feature to find recipes by name or ingredients (with offline caching support).
    - Experience smooth paging with load-more and pull-to-refresh functionalities.
 3. **Offline Capabilities:**
-   - Enjoy continuous access to cached data even when offline.
-
----
-
-## Usage
-
-1. **Launch the App:**
-   - Open the project in Xcode and run it on your preferred simulator or device.
-2. **Explore & Search Menus:**
-   - Use the search bar in the Menu feature to find menus by name.
-   - Experience smooth paging with load-more and pull-to-refresh functionalities.
-3. **Offline Capabilities:**
-   - Enjoy continuous access to cached menu data even when offline.
+   - Enjoy continuous access to cached recipe data even when offline.
 
 ---
 
