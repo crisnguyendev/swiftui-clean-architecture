@@ -9,21 +9,28 @@ import SwiftUI
 
 struct SearchRecipeView: View {
     @ObservedObject var viewModel: SearchRecipeViewModel
+    @ObservedObject var coordinator: SearchRecipeCoordinator
+    @EnvironmentObject var authManager: AuthenticationManager
+    
     @State private var query: String = "burger"
     
     var body: some View {
-        NavigationStack {
+        NavigationStack (path: $coordinator.path) {
             StateRenderer(state: viewModel.state) { items in
                 List(items) { item in
-                    RecipeCell(recipe: item)
-                        .onAppear {
-                            if item == items.last {
-                                Task {
-                                    await viewModel.loadMoreIfNeeded()
-                                }
-                                
+                    NavigationLink(
+                        value: SearchRecipeRoute.detail(recipeId: item.id)
+                    ) {
+                        RecipeCell(recipe: item)
+                    }
+                    .onAppear {
+                        if item == items.last {
+                            Task {
+                                await viewModel.loadMoreIfNeeded()
                             }
+                            
                         }
+                    }
                 }
                 .animation(.default, value: items)
                 .listStyle(.plain)
@@ -34,12 +41,16 @@ struct SearchRecipeView: View {
                     
                 }
                 .navigationTitle("Recipe")
+                .navigationDestination(for: SearchRecipeRoute.self) { route in
+                    coordinator.destination(for: route)
+                }
+                
             }
+            
             .onAppear {
                 Task {
                     await viewModel.search(query: query)
                 }
-                
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -60,6 +71,7 @@ struct SearchRecipeView: View {
                 }
                 
             }
+            
         }
     }
 }

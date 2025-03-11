@@ -34,6 +34,9 @@
         }
       }
     },
+    "Need Login" : {
+
+    },
     "Recipe" : {
       "localizations" : {
         "en" : {
@@ -49,6 +52,9 @@
           }
         }
       }
+    },
+    "Recipe Detail View" : {
+
     },
     "Search Menu" : {
       "localizations" : {
