@@ -10,16 +10,9 @@ import SwiftData
 
 @main
 struct DishcoveryApp: App {
-//    let modelContainer: ModelContainer
-//    let modelContext: ModelContext
-    
+    @StateObject var authenticationManager: AuthenticationManager = AuthenticationManager()
     init() {
-//        do {
-//            modelContainer = try ModelContainer(for: Menu.self, RecipeEntity.self)
-//            modelContext = modelContainer.mainContext
-//        } catch {
-//            fatalError("Failed to initialize ModelContainer: \(error.localizedDescription)")
-//        }
+    
     }
     
     var body: some Scene {
@@ -36,21 +29,8 @@ struct DishcoveryApp: App {
             //
             //            MenuListView(viewModel: viewModel)
             //                .modelContainer(modelContainer)
-            
-            let networkService = URLSessionNetworkService()
-            let persistentService = SwiftDataService<RecipeEntity>(
-                modelContainer: ModelContainerManager.shared.modelContainer,
-                autoSave: true)
-            let repository = RecipeRepository(
-                networkService: networkService,
-                persistentService: persistentService
-            )
-            let useCase = SearchRecipeUseCase(repository: repository)
-            let viewModel = SearchRecipeViewModel(usecase: useCase)
-            SearchRecipeView(viewModel: viewModel)
-            
-            
-            
+            SearchRecipeViewFactory.build()
+                .environmentObject(authenticationManager)
         }
     }
 }
