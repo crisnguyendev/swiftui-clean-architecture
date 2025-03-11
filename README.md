@@ -99,7 +99,6 @@ The project is divided into distinct modules:
 - **Domain Layer:**
   - **Model:**  
     Defines the core business objects (e.g., `MenuModel`, `RecipeModel`, `ServingModel`). These models represent the data in its simplest form without any dependency on frameworks.
-    Contains plain Swift code only, independent of frameworks such as SwiftUI or SwiftData. This ensures that business logic remains framework-agnostic and easily testable.
   - **UseCase:**  
     Encapsulates the business logic of the application. Use cases, such as `SearchMenuUseCaseProtocol` and `SearchRecipesUseCaseProtocol`, execute specific business actions like fetching data or processing user inputs.
   
