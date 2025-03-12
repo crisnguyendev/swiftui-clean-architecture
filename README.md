@@ -11,7 +11,9 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 - [Architecture](#architecture)
   - [Core Module](#core-module)
   - [Modular Structure & Feature Breakdown](#modular-structure--feature-breakdown)
-- [Design Trade-offs](#design-trade-offs)
+    - [Clean Architecture Structure](#clean-architecture-structure)
+    - [Presentation Patterns](#presentation-patterns)
+- [Design Tradeoffs](#design-tradeoffs)
 - [Environment & Build Configuration](#environment--build-configuration)
 - [API Integration](#api-integration)
 - [Testing](#testing)
@@ -25,9 +27,10 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 ## Features
 
 - **Discover Recipes:** Browse a curated list of recipes.
-- **Search Functionality:** Search recipes by name or ingredients.
+- **Search Menu:** Search menu items by name with pagination support (no offline caching).
+- **Search Recipe:** Search recipes by name or ingredients using a dedicated API service, with offline caching support.
 - **Detailed Recipe Information:** View details like ingredients, instructions, nutritional facts, and more.
-- **Offline Support & Caching:** Work offline seamlessly using locally cached data.
+- **Offline Support & Caching:** Recipe data is cached locally to ensure access when offline.
 - **Paging & Refresh:** Integrated support for load-more pagination and pull-to-refresh actions.
 - **Multi Environment Support:**  
   - Build variants managed with Xcconfig files, custom Info.plist keys, and defined schemes.
@@ -35,21 +38,11 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 - **Internationalization & Localization:** Centralized string catalog for managing localized content.
 - **Accessibility:** Utilizes SwiftUI’s default behavior to ensure an inclusive user experience.
 - **Robust Testing:**  
-  - **Unit Testing:** Implemented with XCTest.
-  - **UI Testing:** Automated with XCUITest.
+  - **Unit Testing:** Implemented with XCTest, covering critical components such as use cases (business logic), ViewModels (interaction between view and domain), and repository tests (logic in the data layer).
+  - **UI Testing:** Coming soon.
 - **Clean & Modular Architecture:**  
   - **Core Module:** Built on protocol-oriented abstractions for easy library replacement and implementation modifications.
-  - **Feature Modules:** Organized by functionality (e.g., Menu, Search) with dedicated layers.
-- **Advanced Networking & Logging:**  
-  - **Network:** Powered by Alamofire with support for interceptors (authorization, retry, and SSL pinning).
-  - **Logger:** Uses SwiftyBeaver for advanced logging.
-- **Security:**  
-  - Token manager to support OAuth/JWT integration in the future.
-  - Secure data storage using KeychainService.
-- **Common Resources:**  
-  - Extensions for colors, fonts, dimensions, modifiers, and localized strings.
-- **Dependency Injection:** Supports dependency injection for decoupled, modular, and testable code.
-- **Dependency Management:** Uses Swift Package Manager (SPM) to manage dependencies, frameworks, and libraries.
+  - **Feature Modules:** Organized by functionality (e.g., Menu, Recipe) with dedicated layers.
 
 ---
 
@@ -73,6 +66,9 @@ Dishcovery is an iOS application built with SwiftUI that follows Clean & Modular
 4. **Feature Rollout Management**
    - Integrate with LaunchDarkly or similar tools for percentage-based rollouts, targeted user releases, version-specific features, and dependency-based rollouts.
 
+5. **Apply MVI Pattern for Menu**
+   - Explore applying the Model-View-Intent (MVI) pattern for the Menu feature to reflect that the presentation layer can be flexible and adaptable to either MVVM or MVI approaches.
+
 ---
 
 ## Architecture
@@ -81,86 +77,63 @@ Dishcovery is structured with a focus on separation of concerns, ensuring that e
 
 ### Core Module
 
-The **Core** module provides the essential services and common resources for the entire application. It is entirely built on protocol-oriented abstractions so that libraries or implementations (e.g., networking, logging, caching) can be replaced with minimal impact on the overall project.
+The **Core** module provides the essential services and common resources for the entire application. It is built entirely on protocol-oriented abstractions so that libraries or implementations (e.g., networking, logging, caching) can be replaced with minimal impact on the overall project. Key examples include:
 
-- **Logger:** Utilizes [SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver) for flexible logging.
-- **Networking:** Uses [Alamofire](https://github.com/Alamofire/Alamofire) to handle network requests with support for interceptors that manage:
-  - **Authorization:** Attaching tokens automatically.
-  - **Retry Logic:** Managing transient failures.
-  - **Security:** Implementing SSL pinning.
-- **Common Resources:**  
-  - Shared extensions for UI elements (colors, fonts, dimensions, modifiers).
-  - A centralized system for localized strings.
-- **Security Services:**  
-  - Token Manager for future OAuth/JWT integration.
-  - KeychainService for secure data storage.
+- **Networking Services:**  
+  - **Menu Feature:** Uses `AlamofireNetworkService` for calling the API.
+  - **Recipe Feature:** Uses `URLSessionNetworkService` for calling the API.  
+    Both services conform to the same `NetworkServiceProtocol`, making them interchangeable.
+  
+- **Persistent Service Layer:**  
+  The persistent layer is abstracted through protocols, allowing it to be swapped between SwiftData, CoreData, Realm, or any other framework in the future.
 
 ### Modular Structure & Feature Breakdown
 
 The project is divided into distinct modules:
 
 - **Core:** Contains shared services and infrastructure components.
-- **Features:** Each feature is self-contained and adheres to Clean Architecture principles, breaking down into:
-  - **Domain:**  
-    - **Entities:** Define core data models.  
-      *Example:* `MenuItem` and `Serving` are defined to model menu data.
-    - **Use Cases:** Contain business logic.  
-      *Example:* The `FetchMenuItemsUseCaseProtocol` defines a use case to fetch menu items:
-      ```swift
-      import Foundation
+- **Features:** Each feature is self-contained and adheres to Clean Architecture principles, breaking down into several layers:
 
-      protocol FetchMenuItemsUseCaseProtocol {
-          func execute(query: String, offset: Int, number: Int) async throws -> [MenuItem]
-      }
-      ```
-  - **Data:**  
-    - Implements the repository pattern to abstract data access.
-    - Combines remote API calls with local caching strategies (SwiftData) for offline support.
-  - **Presentation:**  
-    - Follows the MVVM pattern.  
-      - **ViewModel:** Manages state, search inputs, pagination (load more and pull-to-refresh), and offline data handling.
-      - **View:** SwiftUI views that display data and manage user interactions.
+#### Clean Architecture Structure
 
-#### Feature: Menu
-
-The **Menu** feature allows users to search menus by name, even when offline. Key aspects include:
-
-- **Search by Name:**  
-  Users can search for menus using keywords. The search functionality leverages the `SearchMenuByNameUseCase`.
+- **Domain Layer:**
+  - **Model:**  
+    Defines the core business objects (e.g., `MenuModel`, `RecipeModel`, `ServingModel`). These models represent the data in its simplest form without any dependency on frameworks.
+  - **UseCase:**  
+    Encapsulates the business logic of the application. Use cases, such as `SearchMenuUseCaseProtocol` and `SearchRecipesUseCaseProtocol`, execute specific business actions like fetching data or processing user inputs.
   
-- **Offline Support & Caching:**  
-  Fetched menu data is cached locally (using SwiftData and other caching strategies) to provide a seamless offline experience.
-  
-- **Paging Integration:**  
-  Implements pagination to handle large datasets:
-  - **Load More:** Automatically loads additional data as the user scrolls.
-  - **Pull-to-Refresh:** Allows users to refresh the menu list to fetch the latest data.
+- **Data Layer:**
+  - **Repository:**  
+    Provides a unified interface to access data by abstracting both remote API calls and local caching strategies.
+  - **DTO (Data Transfer Object):**  
+    Structures data for network transfers, ensuring that external data is properly mapped into the application's internal models.
+  - **Entity (Persistent):**  
+    Represents the data model tailored for persistence (e.g., using SwiftData, CoreData, or Realm) and may include additional persistence metadata.
+  - **Adapter:**  
+    Transforms DTOs into domain models and persistent entities, ensuring smooth data flow across layers.
 
-*Refer to the project code for detailed implementations in the `Features/Menu` folder, including `MenuItem.swift`, `MenuRepository.swift`, `MenuViewModel.swift`, and associated files.*
+#### Presentation Layer
+
+- **View:**  
+  SwiftUI views or other UI components responsible for displaying data.  
+  The View depends on the ViewModel but not vice versa. This decoupling means the ViewModel can be reused in various UI layers without being tightly bound to a specific view implementation.
+- **ViewModel:**  
+  Acts as an intermediary between the View and Domain layers, managing state, processing user inputs, and coordinating with use cases.
+- **Coordinator:**  
+  Manages navigation and the flow between different screens or modules, keeping navigation logic decoupled from the views.
+
+#### Presentation Patterns
+
+- **Recipe Feature (MVVM-C):**  
+  Implements the Model-View-ViewModel-Coordinator pattern to promote modularity and clear navigation flows. The Coordinator handles screen transitions, while the ViewModel focuses on business logic.
+- **Menu Feature (MVI):**  
+  Adopts the Model-View-Intent pattern, using unidirectional data flow to manage reactive state and user interactions, especially useful for complex interactions like pagination.
 
 ---
 
-## Design Trade-offs
+## Design Tradeoffs
 
-#### Use of `@Model` Macro with SwiftData in Domain Models
-In this project, **SwiftData's `@Model` macro is used directly in the domain layer models** (e.g., `MenuItem`). This approach is a deviation from the traditional **Clean Architecture principle**, which advocates separating domain models from data persistence layers.
-
-### **Why this Trade-off?**
-- **Convenience:** SwiftData tightly integrates with SwiftUI, allowing seamless use of `@Model` objects in SwiftUI views.
-- **Performance Optimization:** Using SwiftData in the domain model minimizes complexity and leverages its built-in data-binding features.
-- **Long-term Focus:** This decision aligns with our plan to stick with **SwiftUI and SwiftData** for the foreseeable future.
-
-### **Alternative Approach**
-A more "Clean Architecture"-compliant approach would:
-1. Define **domain models** without the `@Model` macro.
-2. Use a **data layer** (e.g., repositories) to convert SwiftData objects into domain models.
-3. Ensure a strict separation of concerns between domain and data layers.
-
-However, this would:
-- Add unnecessary complexity.
-- Reduce the benefits of SwiftData's seamless integration with SwiftUI.
-
-This trade-off reflects our prioritization of simplicity and productivity over strict adherence to architectural purity.
+Following Clean Architecture leads to a more structured and modular codebase, but it also creates more code and adds complexity to the project structure. For example, separating the domain model from persistent entities (Entity) and network models (DTO) may sacrifice some of the simplicity and direct integration benefits offered by SwiftData with SwiftUI. However, this separation makes the project significantly more flexible and scalable by decoupling it from any specific framework, ensuring that underlying technologies can be changed or upgraded at any time without impacting the core business logic.
 
 ---
 
@@ -185,16 +158,20 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
    - Register at the Spoonacular API page to obtain your API key.
    - Store your API key securely in a configuration file (e.g., `Secrets.plist`) or via environment variables.
 2. **Data Layer Integration:**
-   - The repository combines remote API calls with local caching to ensure data is available offline and updated in real-time when online.
+   - For the **Search Recipe** feature, the repository combines remote API calls with local caching to ensure recipe data is available offline.
+   - The **Search Menu** feature relies solely on remote API calls with pagination support.
 
 ---
 
 ## Testing
 
 - **Unit Testing:**  
-  - Use XCTest to validate business logic and component behavior.
+  Implemented with XCTest, covering critical components:
+  - **Use Cases:** Validate business logic by ensuring that core actions (e.g., fetching menu items or recipes) work as expected.
+  - **ViewModels:** Ensure that the interaction between the view and domain is handled correctly, including state management, pagination, and user inputs.
+  - **Repository Tests:** Cover logic in the data layer by testing repository implementations, ensuring correct integration of remote API calls, local caching, and data transformation through adapters.
 - **UI Testing:**  
-  - Implement automated tests with XCUITest to ensure a smooth user experience.
+  - **Coming Soon:** Future releases will include UI testing using XCUITest to ensure a seamless user experience.
 - **Multi Environment Testing:**  
   - Leverage different Xcconfig files and schemes to test across Production, Development, and Staging environments.
 
@@ -204,11 +181,12 @@ Dishcovery integrates with the [Spoonacular Food API](https://spoonacular.com/fo
 
 1. **Launch the App:**
    - Open the project in Xcode and run it on your preferred simulator or device.
-2. **Explore & Search Menus:**
-   - Use the search bar in the Menu feature to find menus by name.
+2. **Explore & Search:**
+   - Use the search bar in the **Menu** feature to find menus by name (online only).
+   - Use the search bar in the **Recipe** feature to find recipes by name or ingredients (with offline caching support).
    - Experience smooth paging with load-more and pull-to-refresh functionalities.
 3. **Offline Capabilities:**
-   - Enjoy continuous access to cached menu data even when offline.
+   - Enjoy continuous access to cached recipe data even when offline.
 
 ---
 
